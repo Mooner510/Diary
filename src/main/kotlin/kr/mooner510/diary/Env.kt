@@ -6,6 +6,7 @@ object Env {
     var COMMAND_CHANNEL_ID: String = ""
     var NOTION_KEY: String = ""
     var NOTION_VERSION: String = ""
+    var DISCORD_KEY: String = ""
 
     fun init() {
         println("ENV Configuration Found: Setup ENVIRONMENT VARIABLES")
@@ -15,5 +16,6 @@ object Env {
 
         System.getenv("NOTION_KEY")?.let { NOTION_KEY = it }
         System.getenv("NOTION_VERSION")?.let { NOTION_VERSION = it }
+        System.getenv("DISCORD_KEY")?.let { DISCORD_KEY = it }
     }
 }

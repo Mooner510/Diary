@@ -38,7 +38,7 @@ object Diary {
     private lateinit var jda: JDA
 
     @JvmStatic
-    fun main(args: Array<String>) {
+    fun main() {
         if (System.getenv("READY") != null) {
             Env.init()
         }
@@ -61,7 +61,7 @@ object Diary {
             }
         }
 
-        jda = JDABuilder.createDefault(args[0], GatewayIntent.entries.toMutableList())
+        jda = JDABuilder.createDefault(Env.DISCORD_KEY, GatewayIntent.entries.toMutableList())
             .addEventListeners(EventListener)
             .build()
 
