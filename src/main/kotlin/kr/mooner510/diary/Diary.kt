@@ -1,6 +1,5 @@
 package kr.mooner510.diary
 
-import kr.mooner510.diary.Env.DELAY
 import kr.mooner510.diary.EventListener.toDateTime
 import kr.mooner510.diary.EventListener.toRelative
 import kr.mooner510.diary.NotionRequest.requestAfter
@@ -11,6 +10,7 @@ import net.dv8tion.jda.api.entities.channel.concrete.TextChannel
 import net.dv8tion.jda.api.requests.GatewayIntent
 import okhttp3.OkHttpClient
 import org.json.JSONObject
+import org.slf4j.LoggerFactory
 import java.io.File
 import java.io.FileReader
 import java.io.FileWriter
@@ -38,9 +38,16 @@ object Diary {
     private lateinit var jda: JDA
 
     @JvmStatic
-    fun main() {
+    fun main(args: Array<String>) {
         if (System.getenv("READY") != null) {
             Env.init()
+        } else {
+            try {
+                throw EnvironmentException()
+            } catch (e: EnvironmentException) {
+                e.printStackTrace()
+            }
+            Runtime.getRuntime().exit(404)
         }
 
         if (lastFetchFile.exists()) {
@@ -97,7 +104,7 @@ object Diary {
     }
 
     private fun send(fetch: Boolean = false) {
-        jda.presence.activity = Activity.customStatus("Next Fetch: ${LocalDateTime.now().plusSeconds(DELAY / 1000).withNano(0).toLocalTime()}")
+        jda.presence.activity = Activity.customStatus("Next Fetch: ${LocalDateTime.now().plusSeconds(Env.DELAY / 1000).withNano(0).toLocalTime()}")
         client.newCall(requestAfter(lastFetchTime)).execute().use { response ->
             val json = JSONObject(response.body?.string())
 
